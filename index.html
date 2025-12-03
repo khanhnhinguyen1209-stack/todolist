@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List Manager</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="/_sdk/data_sdk.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+      <div class="card">
+        <h1 id="appTitle">Danh Sách Công Việc</h1>
+        <p id="welcomeMessage">Quản lý công việc hiệu quả</p>
+        <form id="loginForm">
+          <input type="text" id="usernameInput" placeholder="Tên người dùng" required>
+          <button type="submit" id="loginButton">Đăng Nhập</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main App Screen -->
+    <div id="mainScreen" class="main-screen hidden">
+      <div class="card">
+        <div class="header">
+          <h1 id="mainAppTitle">Danh Sách Công Việc</h1>
+          <p id="userGreeting"></p>
+          <button id="logoutButton">Đăng Xuất</button>
+        </div>
+
+        <!-- Add Task Form -->
+        <form id="addTaskForm" class="add-task-form">
+          <input type="text" id="taskText" placeholder="Công việc" required>
+          <input type="datetime-local" id="taskDeadline" required>
+          <button type="submit" id="addTaskButton">Thêm Công Việc</button>
+        </form>
+
+        <!-- Tasks List -->
+        <div id="tasksContainer">
+          <div id="tasksList"></div>
+          <div id="emptyState" class="hidden">Chưa có công việc nào</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
