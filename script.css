@@ -1,0 +1,82 @@
+let allTasks = [];
+let currentUser = null;
+
+function renderTasks() {
+  const tasksList = document.getElementById('tasksList');
+  const emptyState = document.getElementById('emptyState');
+
+  const userTasks = allTasks.filter(task => task.userId === currentUser);
+
+  if (userTasks.length === 0) {
+    tasksList.innerHTML = '';
+    emptyState.classList.remove('hidden');
+    return;
+  }
+
+  emptyState.classList.add('hidden');
+  tasksList.innerHTML = userTasks.map(task => `
+    <div class="task-item" data-task-id="${task.id}">
+      <input type="checkbox" ${task.status === 'done' ? 'checked' : ''} class="task-checkbox">
+      <span class="${task.status === 'done' ? 'done' : ''}">${task.text}</span>
+      <button class="delete-task-btn" data-task-id="${task.id}">Xóa</button>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.task-checkbox').forEach(cb => {
+    cb.addEventListener('change', handleToggleTask);
+  });
+
+  document.querySelectorAll('.delete-task-btn').forEach(btn => {
+    btn.addEventListener('click', handleDeleteTask);
+  });
+}
+
+function handleToggleTask(e) {
+  const taskId = e.target.dataset.taskId;
+  const task = allTasks.find(t => t.id === taskId);
+  if (!task) return;
+  task.status = task.status === 'pending' ? 'done' : 'pending';
+  renderTasks();
+}
+
+function handleDeleteTask(e) {
+  const taskId = e.target.dataset.taskId;
+  allTasks = allTasks.filter(t => t.id !== taskId);
+  renderTasks();
+}
+
+document.getElementById('loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const username = document.getElementById('usernameInput').value.trim();
+  if (!username) return;
+  currentUser = username;
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('mainScreen').classList.remove('hidden');
+  renderTasks();
+});
+
+document.getElementById('logoutButton').addEventListener('click', () => {
+  currentUser = null;
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('mainScreen').classList.add('hidden');
+});
+
+document.getElementById('addTaskForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const text = document.getElementById('taskText').value.trim();
+  const deadline = document.getElementById('taskDeadline').value;
+  if (!text || !deadline) return;
+
+  const newTask = {
+    id: Date.now().toString(),
+    text,
+    deadline,
+    status: 'pending',
+    userId: currentUser
+  };
+  allTasks.push(newTask);
+
+  document.getElementById('taskText').value = '';
+  document.getElementById('taskDeadline').value = '';
+  renderTasks();
+});
